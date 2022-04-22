@@ -38,7 +38,7 @@ class Branch(BaseModel):
         """
         endpoint = "/projects/%s/branches/%s/files/%s/content" % (
             self.project,
-            self.name,
+            quote(self.name, safe=""),
             quote(file, safe=""),
         )
         response = self.gerrit.requester.get(self.gerrit.get_endpoint_url(endpoint))
@@ -62,7 +62,7 @@ class Branch(BaseModel):
           https://gerrit-review.googlesource.com/Documentation/rest-api-changes.html#merge-input
         :return:
         """
-        endpoint = "/projects/%s/branches/%s/mergeable" % (self.project, self.name)
+        endpoint = "/projects/%s/branches/%s/mergeable" % (self.project, quote(self.name, safe=""))
         response = self.gerrit.requester.get(
             self.gerrit.get_endpoint_url(endpoint), params=input_
         )
@@ -75,7 +75,7 @@ class Branch(BaseModel):
 
         :return:
         """
-        endpoint = "/projects/%s/branches/%s/reflog" % (self.project, self.name)
+        endpoint = "/projects/%s/branches/%s/reflog" % (self.project, quote(self.name, safe=""))
         response = self.gerrit.requester.get(self.gerrit.get_endpoint_url(endpoint))
         result = self.gerrit.decode_response(response)
         return result
@@ -86,7 +86,7 @@ class Branch(BaseModel):
 
         :return:
         """
-        endpoint = "/projects/%s/branches/%s" % (self.project, self.name)
+        endpoint = "/projects/%s/branches/%s" % (self.project, quote(self.name, safe=""))
         self.gerrit.requester.delete(self.gerrit.get_endpoint_url(endpoint))
 
 
